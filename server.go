@@ -51,11 +51,10 @@ func main() {
 	fmt.Println(string(dump))
 
 	// クライアントからのリクエストをファイルに出力
-	// err = os.WriteFile("./go_server_recv.txt", request, 0644)	// "err = ~~~"になってるのは、文字通りエラーがerrに格納されるから。
-	// 書き込み失敗したらエラー吐く
-	// if err != nil {
-	// 	fmt.Println("エラー: ", err)
-	// }
+	f, err := os.Create("./go_server_recv.txt")
+	count, err := f.Write(dump)
+	// バイト数確認
+	fmt.Printf("write %d bytes\n", count)
 
 	// レスポンスをファイルから取得
 	response, err := os.ReadFile("./server_send.txt")
@@ -66,7 +65,6 @@ func main() {
 
 	// レスポンスをクライアントに送る
 	_, err = conn.Write(response)
-
 	// 送るのに失敗したらエラー吐く
 	if err != nil {
 		fmt.Println("エラー: ", err)
